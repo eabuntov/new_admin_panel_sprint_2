@@ -5,22 +5,49 @@ services:
     expose:
       - "8000"
     env_file:
-      - ./.env
+      - .env
+    networks:
+      - app-network
+    volumes:
+      - django_static:/opt/app/static
+    depends_on:
+      - theatre-db
 
   nginx:
     image: nginx:latest
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - ./configs:/etc/nginx/conf.d:ro
+      - django_static:/usr/share/nginx/html/static:ro
     depends_on:
       - service
     ports:
       - "80:80"
+    networks:
+      - app-network
 
   theatre-db:
-#    Тут необходимо описать недостающие элементы
+    image: postgres:17.6-alpine
+    container_name: theatre-db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
+      - theatre_db_data:/var/lib/postgresql/data
       - ./database_dump.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "${SQL_PORT}:${SQL_PORT}"
+    networks:
+      - app-network
 
 
+  # Named volume for Postgres data persistence
+volumes:
+  theatre_db_data:
+  django_static:
+
+networks:
+  app-network:
+    driver: bridge
 
