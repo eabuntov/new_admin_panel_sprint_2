@@ -9,19 +9,12 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     UWSGI_HARAKIRI=240 \
     DJANGO_SETTINGS_MODULE=example.settings
 
-COPY run_uwsgi.sh run_uwsgi.sh
-COPY requirements.txt requirements.txt
-COPY uwsgi/uwsgi.ini uwsgi.ini
-
 RUN mkdir -p /var/www/static/ \
     && mkdir -p /var/www/media/ \
     && mkdir -p /opt/app/static/ \
     && mkdir -p /opt/app/media/ \
     && pip install --upgrade pip \
-    && pip install -r requirements.txt \
-    && apt install media-types
-
-COPY . .
+    && pip install -r requirements.txt
 
 EXPOSE 8000
 

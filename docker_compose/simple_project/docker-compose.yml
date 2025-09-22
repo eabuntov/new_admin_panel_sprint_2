@@ -10,6 +10,7 @@ services:
       - app-network
     volumes:
       - django_static:/opt/app/static
+      - ./app:/opt/app
     depends_on:
       - theatre-db
 
@@ -22,7 +23,7 @@ services:
     depends_on:
       - service
     ports:
-      - "80:80"
+      - "8000:8000"
     networks:
       - app-network
 
