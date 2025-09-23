@@ -37,8 +37,8 @@ services:
     volumes:
       - theatre_db_data:/var/lib/postgresql/data
       - ./database_dump.sql:/docker-entrypoint-initdb.d/init.sql
-    ports:
-      - "${SQL_PORT}:${SQL_PORT}"
+    expose:
+      - "${SQL_PORT}"
     networks:
       - app-network
 
