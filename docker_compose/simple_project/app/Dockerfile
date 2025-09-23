@@ -19,7 +19,6 @@ RUN mkdir -p /var/www/static/ \
 EXPOSE 8000
 
 # Collect static files and run migrations before starting uWSGI
-CMD python manage.py makemigrations --noinput && \
-    python manage.py migrate --noinput && \
+CMD python manage.py migrate --noinput && \
     python manage.py collectstatic --noinput && \
     uwsgi --strict --ini uwsgi.ini
